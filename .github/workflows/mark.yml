@@ -1,12 +1,12 @@
-name: 'GitHub Actions DZqiandao Bot'
+name: 'GitHub Actions Youthstudy Bot'
 # UTC17:00(北京UTC+8 01:00点)触发任务
 on:
   push:
   schedule:
-    - cron: '0 16 * * *'
+    - cron: '0 17 * * *'
 
 jobs:
-  curl-discuz:
+  youthstudymark:
      runs-on: ubuntu-latest
      steps:
        - name: 'xecute command'
