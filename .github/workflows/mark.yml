@@ -16,4 +16,4 @@ jobs:
           X_LITEMALL_TOKEN: ${{ secrets.X_LITEMALL_TOKEN }}
          # 向站点发送 GET 请求
          run:                                 
-          curl -A "$USER_AGENT" -d "{"X-Litemall-IdentiFication":"young","X-Litemall-Token":"$X_LITEMALL_TOKEN"}" -H "Content-Type:application/json" "https://youthstudy.12355.net/saomah5/api/young/mark/add"
+          curl -X GET  -A "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36 NetType/WIFI MicroMessenger/7.0.20.1781(0x6700143B) WindowsWechat(0x63040026)" -H "Content-Type:application/json;charset=UTF-8" "https://youthstudy.12355.net/saomah5/api/young/mark/add?X-Litemall-IdentiFication=young&X-Litemall-Token=$X_LITEMALL_TOKEN"
