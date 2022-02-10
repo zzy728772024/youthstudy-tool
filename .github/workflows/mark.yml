@@ -1,0 +1,19 @@
+name: 'GitHub Actions DZqiandao Bot'
+# UTC17:00(北京UTC+8 01:00点)触发任务
+on:
+  push:
+  schedule:
+    - cron: '0 16 * * *'
+
+jobs:
+  curl-discuz:
+     runs-on: ubuntu-latest
+     steps:
+       - name: 'xecute command'
+         env:
+          USER_AGENT: ${{ secrets.USER_AGENT }}
+          #Token用于识别登录状态与身份
+          X_LITEMALL_TOKEN: ${{ secrets.X_LITEMALL_TOKEN }}
+         # 向站点发送 GET 请求
+         run:                                 
+          curl -A "$USER_AGENT" -d "{"X-Litemall-IdentiFication":"young","X-Litemall-Token":"$X_LITEMALL_TOKEN"}" -H "Content-Type:application/json" "https://youthstudy.12355.net/saomah5/api/young/mark/add"
