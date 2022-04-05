@@ -14,6 +14,6 @@ jobs:
           USER_AGENT: ${{ secrets.USER_AGENT }}
           #Token用于识别登录状态与身份
           X_LITEMALL_TOKEN: ${{ secrets.X_LITEMALL_TOKEN }}
-         # 向站点发送 GET 请求
+         # 向站点发送 GET 请
          run:                                 
           curl -X GET -H "Host:youthstudy.12355.net" -H "Connection:keep-alive" -H "Origin:https://wjxt.12355.net" -H "X-Litemall-Token:$X_LITEMALL_TOKEN" -H "X-Litemall-IdentiFication:young" -H "$USER_AGENT" -H "Content-Type:application/json" -H "Accept:*/*" -H "X-Requested-With:com.tencent.mm" -H "Sec-Fetch-Site:same-site" -H "Sec-Fetch-Mode:cors" -H "Referer:https://wjxt.12355.net/h5/?code=011N0R000LdViN1CQ5100GSNmb0N0R0N&state=1" -H "Accept-Encoding:gzip, deflate" -H "Accept-Language:zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7" "https://youthstudy.12355.net/saomah5/api/young/mark/add"
