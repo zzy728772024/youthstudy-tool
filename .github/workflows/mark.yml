@@ -17,6 +17,6 @@ jobs:
         with:
           python-version: 3.7
           
-      - name: 'xecute command'
+      - name: 'command'
         run:                                 
           python main.py
