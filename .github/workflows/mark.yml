@@ -1,7 +1,7 @@
 name: 'GitHub Actions Youthstudy Bot'
 # UTC17:00(北京UTC+8 01:00点)触发任务
 on:
-  push:
+  workflow_dispatch:
   schedule:
     - cron: '0 17 * * *'
 
