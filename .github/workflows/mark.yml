@@ -7,16 +7,19 @@ on:
 
 jobs:
   youthstudymark:
-     runs-on: ubuntu-latest
-     steps:
+    runs-on: ubuntu-latest
+    steps:
       - name: checkout actions
       - uses: actions/checkout@v1
-       
+
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
         with:
           python-version: 3.7
+      
+      - name: Set up env
+        run: pip install -r requirement.txt
           
-      - name: 'command'
-        run:                                 
+      - name: command
+        run: |
           python main.py
