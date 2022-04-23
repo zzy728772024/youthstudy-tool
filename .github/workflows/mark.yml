@@ -16,6 +16,9 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: 3.7
+
+      - name: Add xLitemallToken to python file
+        run: sed -i '1i\xLitemallToken="${{ secrets.xLitemallToken }}"' main.py
       
       - name: Set up env
         run: pip install -r requirement.txt

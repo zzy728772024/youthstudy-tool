@@ -10,7 +10,8 @@ cookies = {
     'Hm_lpvt_149ef6fe5d623c086adc1622cf6c0df1': '1649125014',
 }
 
-xLitemallToken="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NTQzMTI4ODcsInBsYXRmb3JtIjoieW91bmciLCJ1c2VybmFtZSI6Ind4X2EyNDJjZTJhLWIyMDYtNGYyNy04N2Y4LWFkNjFmYTE3NDQzMzQzMzMuMDg0MjcxODI0NjMxIn0.U0q0TZv9-mTvzVOAhmkO_NPBRkZQUQeIC21T3i58-rI"
+#如不使用github actions，请删除下方注释并手动设定xLitemallToken
+#xLitemallToken=""
 
 headers = {
     'Host': 'youthstudy.12355.net',
