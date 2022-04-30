@@ -1,22 +1,39 @@
 name: 'GitHub Actions Youthstudy Bot'
-# UTC17:00(北京UTC+8 01:00点)触发任务
+# UTC4:00(北京UTC+8 12:00点)触发任务
 on:
-  push:
+  workflow_dispatch:
   schedule:
-    - cron: '0 17 * * *'
+    - cron: '0 4 * * *'
+
+env:
+  push: true
 
 jobs:
   youthstudymark:
-     runs-on: ubuntu-latest
-     steps:
+    runs-on: ubuntu-latest
+    steps:
       - name: checkout actions
-      - uses: actions/checkout@v1
-       
+        uses: actions/checkout@v1
+
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
         with:
           python-version: 3.7
+
+      - name: Add xLitemallToken to python file
+        run: sed -i '1i\xLitemallToken="${{ secrets.xLitemallToken }}"' main.py
+
+      - name: Add token
+        run: sed -i '1i\token="${{ secrets.PUSHTOKEN }}"' push.py
+
+      - name: Set up env
+        run: pip install -r requirement.txt
           
-      - name: 'command'
-        run:                                 
+      - name: Run main command
+        run: |
           python main.py
+
+      - name: Push result to Wechat By pushplus
+        if: env.push == 'true'
+        run: |
+          python push.py
