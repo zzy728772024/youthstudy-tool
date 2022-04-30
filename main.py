@@ -14,7 +14,7 @@ cookies = {
 #xLitemallToken=""
 
 #检查xLitemallToken
-if 'xLitemallToken' in locals().keys() == True:
+if ('xLitemallToken' in locals().keys()) == True:
     pass
 else:
     exit('+========================+\n| xLitemallToken未定义！ |\n+========================+')

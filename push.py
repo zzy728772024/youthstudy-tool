@@ -4,7 +4,7 @@ with open('result.txt','r',encoding='utf8') as origin_file:
 origin=eval(origin)
 pushdata={}
 #检查token
-if 'token' in locals().keys() == True:
+if ('token' in locals().keys()) == True:
     pass
 else:
     exit('+===============+\n| Token未定义！ |\n+===============+')
