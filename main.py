@@ -7,6 +7,12 @@ t = int(round(time.time()* 1000))
 #如不使用github actions，请删除下方注释并手动设定xLitemallToken
 #xLitemallToken=""
 
+#检查xLitemallToken
+if ('xLitemallToken' in locals().keys()) == True:
+    pass
+else:
+    exit('+========================+\n| xLitemallToken未定义！ |\n+========================+')
+
 headers = {
     'Host': 'youthstudy.12355.net',
     'Connection': 'keep-alive',
