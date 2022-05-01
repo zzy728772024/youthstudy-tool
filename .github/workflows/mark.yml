@@ -12,8 +12,8 @@ jobs:
   youthstudymark:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout actions
-        uses: actions/checkout@v1
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
       - name: Set up Python 3.7
         uses: actions/setup-python@v1
@@ -23,17 +23,15 @@ jobs:
       - name: Add xLitemallToken to python file
         run: sed -i '1i\xLitemallToken="${{ secrets.xLitemallToken }}"' main.py
 
-      - name: Add token
+      - name: Add push token
         run: sed -i '1i\token="${{ secrets.PUSHTOKEN }}"' push.py
 
       - name: Set up env
         run: pip install -r requirement.txt
           
       - name: Run main command
-        run: |
-          python main.py
+        run: python main.py
 
-      - name: Push result to Wechat By pushplus
+      - name: Push result to Wechat by pushplus
         if: env.push == 'true'
-        run: |
-          python push.py
+        run: python push.py
