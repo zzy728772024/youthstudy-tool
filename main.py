@@ -44,14 +44,23 @@ headersj = {
     'Referer': 'https://youthstudy.12355.net/h5/',
     'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
 }
-# 签到
+#获取积分
+def GetScore():
+    profile_dist=json.loads(requests.get('https://youthstudy.12355.net/saomah5/api/myself/get',headers=headers).text)
+    if profile_dist['errmsg'] == '成功':
+        return(profile_dist['data']['entity']['score'])
+    else:
+        return('error')
+score=GetScore()
+# (广东)每日签到
 print("开始签到:")
 mark = requests.get('https://youthstudy.12355.net/saomah5/api/young/mark/add', headers=headersj)
 msg=json.loads(mark.text).get('msg')
 print(msg)
+
+# 青年大学习打卡
 # 获得最新学习章节
 latest = requests.get('https://youthstudy.12355.net/saomah5/api/young/chapter/new', headers=headersj)
-
 
 chapterId=json.loads(latest.text).get('data').get('entity').get('id')
 updateDate=json.loads(latest.text).get('data').get('entity').get('updateDate')
@@ -135,6 +144,10 @@ for articles in articleslist:
         addScore = requests.get('https://youthstudy.12355.net/saomah5/api/article/addScore', params=params, headers=headersj)
         print(json.loads(addScore.text).get('msg'),end="")
         addScore_output=addScore_output+json.loads(addScore.text).get('msg')
+
+#积分增加数
+score_add=GetScore()-score
+print('\n此次执行增加了',score_add,'积分')
 '''
 #往期课程
 #获取季
@@ -150,6 +163,6 @@ for course in courselist:
 '''
 output={}
 output['title']=name+'签到'+json.loads(saveHistory.text).get('msg')
-output['result']="更新日期:"+updateDate+"\n名称:"+name+"\n打卡状态:"+json.loads(saveHistory.text).get('msg')+"\n刷题：\n"+submit_output+"\n刷文章：\n"+addScore_output
+output['result']="更新日期:"+updateDate+"\n名称:"+name+"\n打卡状态:"+json.loads(saveHistory.text).get('msg')+"\n刷题：\n"+submit_output+"\n刷文章：\n"+addScore_output+"\n此次执行增加了"+str(score_add)+"积分"
 with open('result.txt','a',encoding='utf8') as new_file:
     new_file.write(str(output))
