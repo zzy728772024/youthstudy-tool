@@ -24,6 +24,7 @@ jobs:
         run: sed -i '1i\xLitemallToken="${{ secrets.xLitemallToken }}"' main.py
 
       - name: Add push token
+        if: env.push == 'true'
         run: sed -i '1i\token="${{ secrets.PUSHTOKEN }}"' push.py
 
       - name: Set up env
