@@ -4,6 +4,10 @@ with open('result.txt','r',encoding='utf8') as origin_file:
     origin=origin_file.read()
 origin=eval(origin)
 pushdata={}
+#推送渠道
+pushdata['channel']='wechat'
+# 具体请查看pushplus api文档https://www.pushplus.plus/doc/guide/api.html
+
 # token=''
 #检查token
 if ('token' in locals().keys()) == True:
