@@ -166,6 +166,7 @@ if __name__ == '__main__':
             addScore = requests.get('https://youthstudy.12355.net/saomah5/api/article/addScore', params=params, headers=headersj)
             print(json.loads(addScore.text).get('msg'),end="")
             addScore_output=addScore_output+json.loads(addScore.text).get('msg')
+            availableArticles+=1
     if availableArticles==0:
         print("无可供学习文章")
         addScore_output=addScore_output+"无可供学习文章"
