@@ -1,5 +1,4 @@
-import requests,json
-import time
+import requests,json,time
 
 #如不使用github actions，请删除下方注释并手动设定xLitemallToken
 #xLitemallToken=""
@@ -78,11 +77,31 @@ if __name__ == '__main__':
 
     print("更新日期:",updateDate,"名称:",name,"打卡状态:",json.loads(saveHistory.text).get('msg'))
 
+    #往期课程刷积分
+    #获取季
+    print("往期课程打卡:")
+    getChapterList = requests.get('https://youthstudy.12355.net/saomah5/api/young/course/list', headers=headersj)
+    chapterList=json.loads(getChapterList.text).get("data").get("list")
+    saveOldHistory_output=''
+    for chapter in chapterList:
+        #获取期
+        #print(chapter['id'])
+        params = {
+            'pid': chapter['id'],
+        }
+        getChapterDetail = requests.get('https://youthstudy.12355.net/saomah5/api/young/course/chapter/list', params=params, headers=headersj)
+        chapterDetail=json.loads(getChapterDetail.text).get('data').get('list')
+        for chapterId in chapterDetail:
+            data = {
+                'chapterId': chapterId['id'],
+            }
+            saveOldHistory = requests.post('https://youthstudy.12355.net/saomah5/api/young/course/chapter/saveHistory', headers=headers,data=data)
+            print(json.loads(saveOldHistory.text).get('msg'),end="")
+            saveOldHistory_output=saveOldHistory_output+json.loads(saveOldHistory.text).get('msg')
 
-    #“我要答题”
-
+    #学习频道-我要答题”
     #获得题目
-    print("刷题:")
+    print("\n刷题:")
     getList = requests.get('https://youthstudy.12355.net/saomah5/api/question/list', headers=headersj)
     #print(getList.text)
     questionlist=json.loads(getList.text).get("data").get("list")
@@ -129,7 +148,7 @@ if __name__ == '__main__':
         print(json.loads(submit.text).get('msg'),end="")
         submit_output=submit_output+json.loads(submit.text).get('msg')
 
-    #“广东共青团原创专区”
+    #学习频道-广东共青团原创专区
     params = {
         'channelId': '1457968754882572290',
         'time': t,
@@ -138,6 +157,7 @@ if __name__ == '__main__':
     articleslist = json.loads(getarticle.text).get("data").get("entity").get("articlesList")
     print("\n刷文章:")
     addScore_output=''
+    availableArticles=0
     for articles in articleslist:
         if articles['scoreStatus'] == False:
             params = {
@@ -146,22 +166,12 @@ if __name__ == '__main__':
             addScore = requests.get('https://youthstudy.12355.net/saomah5/api/article/addScore', params=params, headers=headersj)
             print(json.loads(addScore.text).get('msg'),end="")
             addScore_output=addScore_output+json.loads(addScore.text).get('msg')
-    '''
-    #往期课程
-    #获取季
-    getcourse = requests.get('https://youthstudy.12355.net/saomah5/api/young/course/list', headers=headersj)
-    courselist=json.loads(getcourse.text).get("data").get("list")
-    for course in courselist:
-        #获取期
-        #print(course['id'])
-        params = {
-            'id': course['id'],
-        }
-        getdetail = requests.get('https://youthstudy.12355.net/saomah5/api/young/course/detail', headers=headersj, params=params)
-    '''
+    if availableArticles==0:
+        print("无可供学习文章")
+        addScore_output=addScore_output+"无可供学习文章"
     output={}
     output['title']=name+'签到'+json.loads(saveHistory.text).get('msg')
-    output['result']="更新日期:"+updateDate+"\n名称:"+name+"\n打卡状态:"+json.loads(saveHistory.text).get('msg')+"\n刷题：\n"+submit_output+"\n刷文章：\n"+addScore_output
+    output['result']="更新日期:"+updateDate+"\n名称:"+name+"\n打卡状态:"+json.loads(saveHistory.text).get('msg')+"\n往期课程打卡：\n"+saveOldHistory_output+"\n刷题：\n"+submit_output+"\n刷文章：\n"+addScore_output
     output['score']=score
     with open('result.txt','a',encoding='utf8') as new_file:
         new_file.write(str(output))
