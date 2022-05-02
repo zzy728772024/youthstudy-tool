@@ -44,14 +44,15 @@ headersj = {
     'Referer': 'https://youthstudy.12355.net/h5/',
     'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
 }
-#获取积分
-def GetScore():
+#获取积分、徽章
+class GetProfile:
     profile_dist=json.loads(requests.get('https://youthstudy.12355.net/saomah5/api/myself/get',headers=headers).text)
     if profile_dist['errmsg'] == '成功':
-        return(profile_dist['data']['entity']['score'])
-    else:
-        return('error')
-score=GetScore()
+        def score():
+            return(GetProfile.profile_dist['data']['entity']['score'])
+        def medal():
+            return(GetProfile.profile_dist['data']['entity']['medal']['name'])
+score=GetProfile.score()
 # (广东)每日签到
 print("开始签到:")
 mark = requests.get('https://youthstudy.12355.net/saomah5/api/young/mark/add', headers=headersj)
@@ -145,9 +146,23 @@ for articles in articleslist:
         print(json.loads(addScore.text).get('msg'),end="")
         addScore_output=addScore_output+json.loads(addScore.text).get('msg')
 
-#积分增加数
-score_add=GetScore()-score
-print('\n此次执行增加了',score_add,'积分')
+#小结
+score_now=GetProfile.score()
+score_add=score_now-score
+if score_now < 100:
+    score_need=100-score_now
+elif score_now < 200:
+    score_need=200-score_now
+elif score_now < 500:
+    score_need=500-score_now
+elif score_now < 1000:
+    score_need=1000-score_now
+elif score_now < 5000:
+    score_need=5000-score_now
+else:
+    score_need=0
+sumup_output='\n此次执行增加了'+str(score_add)+'积分'+'\n当前为'+GetProfile.medal()+'，距离下一徽章还需'+str(score_need)+'积分'
+print(sumup_output)
 '''
 #往期课程
 #获取季
@@ -163,6 +178,6 @@ for course in courselist:
 '''
 output={}
 output['title']=name+'签到'+json.loads(saveHistory.text).get('msg')
-output['result']="更新日期:"+updateDate+"\n名称:"+name+"\n打卡状态:"+json.loads(saveHistory.text).get('msg')+"\n刷题：\n"+submit_output+"\n刷文章：\n"+addScore_output+"\n此次执行增加了"+str(score_add)+"积分"
+output['result']="更新日期:"+updateDate+"\n名称:"+name+"\n打卡状态:"+json.loads(saveHistory.text).get('msg')+"\n刷题：\n"+submit_output+"\n刷文章：\n"+addScore_output+sumup_output
 with open('result.txt','a',encoding='utf8') as new_file:
     new_file.write(str(output))
