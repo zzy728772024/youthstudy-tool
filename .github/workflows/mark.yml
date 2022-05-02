@@ -2,6 +2,11 @@ name: 'GitHub Actions Youthstudy Bot'
 # UTC4:00(北京UTC+8 12:00点)触发任务
 on:
   workflow_dispatch:
+    inputs:
+      previous:
+        description: '是否打卡往期课程(true/false)'
+        required: true
+        default: 'false'
   schedule:
     - cron: '0 4 * * *'
 
@@ -32,6 +37,10 @@ jobs:
           
       - name: Run main command
         run: python main.py
+
+      - name: Submit previous activity
+        if: github.event.inputs.previous == 'true'
+        run: python previous.py
 
       - name: Push result to Wechat by pushplus
         if: env.push == 'true'
