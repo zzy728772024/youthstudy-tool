@@ -27,6 +27,6 @@ for chapter in chapterList:
         saveOldHistory = requests.post('https://youthstudy.12355.net/saomah5/api/young/course/chapter/saveHistory', headers=headers,data=data)
         print(json.loads(saveOldHistory.text).get('msg'),end="")
         saveOldHistory_output=saveOldHistory_output+json.loads(saveOldHistory.text).get('msg')
-    origin['result']=origin['result']+saveOldHistory_output
+    origin['result']=origin['result']+'\n往期课程打卡：'+saveOldHistory_output
     with open('result.txt','w+',encoding='utf8') as new_file:
         new_file.write(str(origin))
