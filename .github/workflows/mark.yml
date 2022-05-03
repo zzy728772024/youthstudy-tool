@@ -12,6 +12,7 @@ on:
 
 env:
   push: true
+  way: 'mid' #选择mid或者xLitemallToken
 
 jobs:
   youthstudymark:
@@ -26,7 +27,12 @@ jobs:
           python-version: 3.7
 
       - name: Add xLitemallToken to python file
+        if: env.way == 'xLitemallToken'
         run: sed -i '1i\xLitemallToken="${{ secrets.xLitemallToken }}"' main.py
+
+      - name: Add mid to python file
+        if: env.way == 'mid'
+        run: sed -i '1i\mid=${{ secrets.MID }}' main.py
 
       - name: Add push token
         if: env.push == 'true'
