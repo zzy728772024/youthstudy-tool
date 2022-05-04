@@ -104,6 +104,7 @@ if __name__ == '__main__':#防止import的时候被执行
     print("\n刷题:")
     getList = requests.get('https://youthstudy.12355.net/saomah5/api/question/list', headers=headers)#获取题目列表
     testList=json.loads(getList.text).get("data").get("list")
+    submit_output=''
     for test in testList:
         params = {
             'dataId': test['id'],
