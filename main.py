@@ -102,46 +102,26 @@ if __name__ == '__main__':#防止import的时候被执行
     #学习频道-我要答题”
     #获得题目
     print("\n刷题:")
-    getList = requests.get('https://youthstudy.12355.net/saomah5/api/question/list', headers=headers)
-    #print(getList.text)
-    questionlist=json.loads(getList.text).get("data").get("list")
-    submit_output=''
-    for questions in questionlist:
-        #print(questions['id'])
-        json_data = {
-        'dataId': questions['id'],
-        'commitDetails': [
-            {
-                'questionId': '1510063654195441665',
-                'answer': '2,3,4',
-                'active': True,
-                'questionType': 1,
-            },
-            {
-                'questionId': '1510063654187053058',
-                'answer': '2,4',
-                'active': True,
-                'questionType': 1,
-            },
-            {
-                'questionId': '1510063654203830274',
-                'answer': '1,2,4',
-                'active': True,
-                'questionType': 1,
-            },
-            {
-                'questionId': '1510063654208024578',
-                'answer': '1,2,4',
-                'active': True,
-                'questionType': 1,
-            },
-            {
-                'questionId': '1510063654191247361',
-                'answer': '1,3',
-                'active': True,
-                'questionType': 1,
-            },
-        ],
+    getList = requests.get('https://youthstudy.12355.net/saomah5/api/question/list', headers=headers)#获取题目列表
+    testList=json.loads(getList.text).get("data").get("list")
+    for test in testList:
+        params = {
+            'dataId': test['id'],
+            'time': t,
+        }
+        #获取小题答案等信息
+        testDetail = requests.get('https://youthstudy.12355.net/saomah5/api/question/detail', params=params,headers=headers)
+        questionList=json.loads(testDetail.text).get("data").get("list")
+        commitDetails=[]
+        for i in range(len(questionList)):
+            answerNum=[ord(s)-64 for s in list(questionList[i]['trueAnswer'])]#将列表内的字母换为数字
+            answerStr = [str(x) for x in answerNum]#将列表内的数字换为字符串
+            answer=','.join(answerStr)#将列表换为字符串
+            emptyDict={'questionId': questionList[i]['id'],'answer': answer,'active': True,'questionType': questionList[i]['type']}
+            commitDetails.append(emptyDict)
+        json_data={
+            'dataId':test['id'],
+            'commitDetails':commitDetails
         }
         #刷题
         submit = requests.post('https://youthstudy.12355.net/saomah5/api/question/submit/question', headers=headers, json=json_data)
