@@ -155,5 +155,5 @@ if __name__ == '__main__':#防止import的时候被执行
     output['title']=name+'签到'+json.loads(saveHistory.text).get('msg')
     output['result']="更新日期:"+updateDate+"\n名称:"+name+"\n打卡状态:"+json.loads(saveHistory.text).get('msg')+"\n刷题：\n"+submit_output+"\n刷文章：\n"+addScore_output
     output['score']=score
-    with open('result.txt','a',encoding='utf8') as new_file:
+    with open('result.txt','w+',encoding='utf8') as new_file:
         new_file.write(str(output))
