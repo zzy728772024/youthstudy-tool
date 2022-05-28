@@ -6,12 +6,13 @@ on:
         description: '是否打卡往期课程(true/false)'
         required: true
         default: 'false'
+  #以上勿动
   schedule:
     # UTC4:00(北京UTC+8 12:00点)触发任务
     - cron: '0 4 * * *'
 
 env:
-  push: true
+  push: true #不需要推送的请改为false
 
 jobs:
   youthstudymark:
@@ -26,7 +27,7 @@ jobs:
           python-version: 3.7
 
       - name: Add All Members to python file
-        run: sed -i '1i\member="${{ secrets.members }}"' main.py
+        run: sed -i '1i\member="${{ secrets.mid }}"' main.py
 
       - name: Add push token
         if: env.push == 'true'
