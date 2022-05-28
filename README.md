@@ -15,17 +15,21 @@
   - 广东共青团原创专区刷积分(Beta)
 - 往期课程签到(Beta)(需要手动在actions页面运行)
 - 推送执行结果(默认为微信)
+- 多用户批量执行(Beta)
 ## 使用方法
 #### 注：以下所提到的“仓库”皆为你自己Fork的仓库
 1. Fork本仓库
 2. 在仓库的Settings-Secrets-Actions中分别添加以下两个Secrets并按实际情况填写
     - PUSHTOKEN（pushplus的token，**如不需要推送请将`.github/workflows/mark.yml`中的`push: true`字段改为`push: false`**）
-    - MID（智慧团建-认证资料-生成电子团员证，点击最下方生成按钮。在团员证页面复制链接 应为：`https://tuan.12355.net/wechat/view/information/member_certification_generated.html?memberId=`**xxxxxx**`&showMemberAdditionNames=&showMemberRewardIds=&isShowAllFee=true` 其中xxxxxx即为mid）
-    - ~~XLITEMALLTOKEN（自行抓包获取，**一般位于请求的Headers里**）**（仍可使用，不再推荐）**~~
+    - MEMBERS 【填写mid或者X-Litemall-Token，多个请以|隔开】（智慧团建-认证资料-生成电子团员证，点击最下方生成按钮。在团员证页面复制链接 应为：`https://tuan.12355.net/wechat/view/information/member_certification_generated.html?memberId=`**xxxxxx**`&showMemberAdditionNames=&showMemberRewardIds=&isShowAllFee=true` 其中xxxxxx即为mid，X-Litemall-Token需抓包获取，不推荐使用）
 3. 点击仓库的Actions，再点击“I understand my workflows, go ahead and enable them”的绿色按钮启用actions
 4. 在侧边栏找到“GitHub Actions Youthstudy Bot”并点击，再点击右侧的“Enable workflow”启用此action
 - 如本地使用请在main.py中手动指定xLitemallToken
 - 默认每天中午12点(UTC+8)执行定时任务（由于github action的特性，可能会延迟20分钟左右），如需修改请手动更改`- cron: '0 4 * * *'`字段，生成表达式可以用[https://crontab.guru/](https://crontab.guru/)
+
+## ⚠安全性警告
+- 使用mid或者XLITEMALLTOKEN可以通过api获取大量个人信息，请不要在任何地方公开（包括但不限于commit至公开仓库、发表在issue中等等）
+- 因此，**请不要在公开仓库的secret以外的任何位置输入您的mid或者XLITEMALLTOKEN**
 
 ## 未来支持的功能
 - 学习频道薅羊毛
