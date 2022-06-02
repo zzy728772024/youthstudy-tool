@@ -10,7 +10,7 @@ pushdata['content']=''
 # 具体请查看pushplus api文档https://www.pushplus.plus/doc/guide/api.html
 # token=''
 
-# time.sleep(60)#平台统计有延迟
+time.sleep(60)#平台统计有延迟
 errorcount=0
 for member in origin:
     if member['status']== 'error':
