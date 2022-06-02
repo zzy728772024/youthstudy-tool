@@ -31,6 +31,7 @@ for member in memberlist:
                 print(json.loads(saveOldHistory.text).get('msg'),end="")
                 saveOldHistory_output=saveOldHistory_output+json.loads(saveOldHistory.text).get('msg')
             # origin['result']=origin['result']+'\n往期课程打卡：'+saveOldHistory_output
+        print('\n')
         for result in origin:
             if result['member'] == member:
                 result['result']+='\n往期课程打卡：'+saveOldHistory_output

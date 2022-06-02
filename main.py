@@ -70,12 +70,16 @@ class GetProfile:
         return(self.profile_dist['data']['entity']['nickName'])
 #转换mid
 def ConverMidToXLToken(raw):
-    if re.match('[0-9]{7}',raw):
+    if re.match('[a-zA-Z]',raw):
+        return(raw)
+    else:
         payload="sign="+urllib.parse.quote((json.loads(requests.get('https://tuanapi.12355.net/questionnaire/getYouthLearningUrl?mid='+str(raw),headers=apiHeaders).text))['youthLearningUrl'].replace('https://youthstudy.12355.net/h5/#/?sign=',''))
         rp=json.loads((requests.post('https://youthstudy.12355.net/apih5/api/user/get',headers=youthstudyHeaders,data=payload)).text)
         return(rp["data"]["entity"]["token"])
-    else:
-        return(raw)
+
+# 时间戳
+def t():
+    return(int(round(time.time()* 1000)))
 
 output_list=[]
 if __name__ == '__main__':#防止import的时候被执行
@@ -84,8 +88,6 @@ if __name__ == '__main__':#防止import的时候被执行
             #将mid转换为xLitemallToken
             xLitemallToken=ConverMidToXLToken(member)
             profile=GetProfile(xLitemallToken)#初始化类
-            # 获取时间戳
-            t = int(round(time.time()* 1000))
 
             score=profile.score()#获取打卡前积分，用于后续计算
             # (广东)每日签到
@@ -121,7 +123,7 @@ if __name__ == '__main__':#防止import的时候被执行
             for test in testList:
                 params = {
                     'dataId': test['id'],
-                    'time': t,
+                    'time': t(),
                 }
                 #获取小题答案等信息
                 testDetail = requests.get('https://youthstudy.12355.net/saomah5/api/question/detail', params=params,headers=headers)
@@ -145,7 +147,7 @@ if __name__ == '__main__':#防止import的时候被执行
             #学习频道-广东共青团原创专区
             params = {
                 'channelId': '1457968754882572290',
-                'time': t,
+                'time': t(),
             }
             getarticle = requests.get('https://youthstudy.12355.net/saomah5/api/article/get/channel/article', params=params, headers=headers)
             articleslist = json.loads(getarticle.text).get("data").get("entity").get("articlesList")
@@ -164,11 +166,22 @@ if __name__ == '__main__':#防止import的时候被执行
             if availableArticles==0:
                 print("无可供学习文章")
                 addScore_output=addScore_output+"无可供学习文章"
+            
+            #学习频道-我们爱学习
+            lovestudyinglist=(json.loads(requests.get('https://youthstudy.12355.net/saomah5/api/article/get/channel/article?channelId=1442413897095962625&time='+str(t()),headers=headers).text))['data']['entity']['articlesList']
+            print('学习频道-我们爱学习：')
+            lovestudyingoutput=''
+            for articles in lovestudyinglist:
+                LSaddScore=json.loads(requests.get('https://youthstudy.12355.net/saomah5/api/article/addScore?id='+articles['id'],headers=headers).text)
+                print(LSaddScore['errmsg'],end='')
+                lovestudyingoutput+=LSaddScore['errmsg']
+
+            print('\n')
             output={}
             output['member']=member
             output['name']=profile.name()
             output['status']=name+'签到'+json.loads(saveHistory.text).get('msg')
-            output['result']="更新日期:"+updateDate+"\n名称:"+name+"\n打卡状态:"+json.loads(saveHistory.text).get('msg')+"\n刷题：\n"+submit_output+"\n刷文章：\n"+addScore_output
+            output['result']="更新日期:"+updateDate+"\n名称:"+name+"\n打卡状态:"+json.loads(saveHistory.text).get('msg')+"\n刷题：\n"+submit_output+"\n刷文章：\n"+addScore_output+"\n学习频道-我们爱学习：：\n"+lovestudyingoutput
             output['score']=score
             output_list.append(output)
         except:
