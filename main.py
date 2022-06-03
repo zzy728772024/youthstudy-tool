@@ -143,45 +143,46 @@ if __name__ == '__main__':#防止import的时候被执行
                 submit = requests.post('https://youthstudy.12355.net/saomah5/api/question/submit/question', headers=headers, json=json_data)
                 print(json.loads(submit.text).get('msg'),end="")
                 submit_output=submit_output+json.loads(submit.text).get('msg')
-
-            #学习频道-广东共青团原创专区
-            params = {
-                'channelId': '1457968754882572290',
-                'time': t(),
-            }
-            getarticle = requests.get('https://youthstudy.12355.net/saomah5/api/article/get/channel/article', params=params, headers=headers)
-            articleslist = json.loads(getarticle.text).get("data").get("entity").get("articlesList")
-            print("\n刷文章:")
-            addScore_output=''
-            availableArticles=0
-            for articles in articleslist:
-                if articles['scoreStatus'] == False:
-                    params = {
-                        'id': articles['id'],
-                    }
-                    addScore = requests.get('https://youthstudy.12355.net/saomah5/api/article/addScore', params=params, headers=headers)
-                    print(json.loads(addScore.text).get('msg'),end="")
-                    addScore_output=addScore_output+json.loads(addScore.text).get('msg')
-                    availableArticles+=1
-            if availableArticles==0:
-                print("无可供学习文章")
-                addScore_output=addScore_output+"无可供学习文章"
-            
-            #学习频道-我们爱学习
-            lovestudyinglist=(json.loads(requests.get('https://youthstudy.12355.net/saomah5/api/article/get/channel/article?channelId=1442413897095962625&time='+str(t()),headers=headers).text))['data']['entity']['articlesList']
-            print('学习频道-我们爱学习：')
-            lovestudyingoutput=''
-            for articles in lovestudyinglist:
-                LSaddScore=json.loads(requests.get('https://youthstudy.12355.net/saomah5/api/article/addScore?id='+articles['id'],headers=headers).text)
-                print(LSaddScore['errmsg'],end='')
-                lovestudyingoutput+=LSaddScore['errmsg']
-
             print('\n')
+
+            #学习频道
+            channellist=['1457968754882572290','1442413897095962625','1442413983955804162']#分别为 广东共青团原创专区、我们爱学习、团务小百科
+            print("\n刷文章:")
+            for channelId in channellist:
+                if channelId == '1457968754882572290':
+                    print('广东共青团原创专区：')
+                elif channelId == '1442413897095962625':
+                    print('我们爱学习：')
+                else:
+                    print('团务小百科：')
+                params = {
+                    'channelId': channelId,
+                    'time': t(),
+                }
+                getarticle = requests.get('https://youthstudy.12355.net/saomah5/api/article/get/channel/article', params=params, headers=headers)
+                articleslist = json.loads(getarticle.text).get("data").get("entity").get("articlesList")
+                addScore_output=''
+                availableArticles=0
+                for articles in articleslist:
+                    if articles['scoreStatus'] == False:
+                        params = {
+                            'id': articles['id'],
+                        }
+                        addScore = requests.get('https://youthstudy.12355.net/saomah5/api/article/addScore', params=params, headers=headers)
+                        print(json.loads(addScore.text).get('msg'),end="")
+                        addScore_output=addScore_output+json.loads(addScore.text).get('msg')
+                        availableArticles+=1
+                if availableArticles==0:
+                    print("无可供学习文章\n")
+                    addScore_output=addScore_output+"无可供学习文章"
+                else:
+                    print('\n')
+
             output={}
             output['member']=member
             output['name']=profile.name()
             output['status']=name+'签到'+json.loads(saveHistory.text).get('msg')
-            output['result']="更新日期:"+updateDate+"\n名称:"+name+"\n打卡状态:"+json.loads(saveHistory.text).get('msg')+"\n刷题：\n"+submit_output+"\n刷文章：\n"+addScore_output+"\n学习频道-我们爱学习：：\n"+lovestudyingoutput
+            output['result']="更新日期:"+updateDate+"\n名称:"+name+"\n打卡状态:"+json.loads(saveHistory.text).get('msg')+"\n刷题：\n"+submit_output+"\n学习频道刷文章：\n"+addScore_output
             output['score']=score
             output_list.append(output)
         except:
