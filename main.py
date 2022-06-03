@@ -2,7 +2,7 @@ import requests,json,time,re
 import urllib.parse
 
 #如不使用github actions，请删除下方注释并手动设定member（mid或者X-Litemall-Token，多个请以|隔开）
-# member=''
+#member=''
 apiHeaders = {
   'Host': 'tuanapi.12355.net',
   'Connection': 'keep-alive',
@@ -147,7 +147,7 @@ if __name__ == '__main__':#防止import的时候被执行
 
             #学习频道
             channellist=['1457968754882572290','1442413897095962625','1442413983955804162']#分别为 广东共青团原创专区、我们爱学习、团务小百科
-            print("\n刷文章:")
+            print("\n学习频道:")
             for channelId in channellist:
                 if channelId == '1457968754882572290':
                     print('广东共青团原创专区：')
@@ -157,6 +157,7 @@ if __name__ == '__main__':#防止import的时候被执行
                     print('团务小百科：')
                 params = {
                     'channelId': channelId,
+                    'pageSize': '300',#提高pageSize以获得全部元素
                     'time': t(),
                 }
                 getarticle = requests.get('https://youthstudy.12355.net/saomah5/api/article/get/channel/article', params=params, headers=headers)
@@ -173,8 +174,8 @@ if __name__ == '__main__':#防止import的时候被执行
                         addScore_output=addScore_output+json.loads(addScore.text).get('msg')
                         availableArticles+=1
                 if availableArticles==0:
-                    print("无可供学习文章\n")
-                    addScore_output=addScore_output+"无可供学习文章"
+                    print("无可供学习内容\n")
+                    addScore_output=addScore_output+"无可供学习内容"
                 else:
                     print('\n')
 
