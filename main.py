@@ -81,6 +81,11 @@ def ConverMidToXLToken(raw):
 def t():
     return(int(round(time.time()* 1000)))
 
+#是否达每日积分到限制
+def islimited(XLToken):
+    headers['X-Litemall-Token']=XLToken
+    return(json.loads(requests.get('https://youthstudy.12355.net/saomah5/api/young/score/status',headers=headers).text)['data']['entity']['scoreStatus'])
+
 output_list=[]
 if __name__ == '__main__':#防止import的时候被执行
     for member in memberlist:
@@ -115,75 +120,88 @@ if __name__ == '__main__':#防止import的时候被执行
             print("更新日期:",updateDate,"名称:",name,"打卡状态:",json.loads(saveHistory.text).get('msg'))
 
             #学习频道-我要答题”
-            #获得题目
             print("\n刷题:")
-            getList = requests.get('https://youthstudy.12355.net/saomah5/api/question/list', headers=headers)#获取题目列表
-            testList=json.loads(getList.text).get("data").get("list")
-            submit_output=''
-            for test in testList:
-                params = {
-                    'dataId': test['id'],
-                    'time': t(),
-                }
-                #获取小题答案等信息
-                testDetail = requests.get('https://youthstudy.12355.net/saomah5/api/question/detail', params=params,headers=headers)
-                questionList=json.loads(testDetail.text).get("data").get("list")
-                commitDetails=[]
-                for i in range(len(questionList)):
-                    answerNum=[ord(s)-64 for s in list(questionList[i]['trueAnswer'])]#将列表内的字母换为数字
-                    answerStr = [str(x) for x in answerNum]#将列表内的数字换为字符串
-                    answer=','.join(answerStr)#将列表换为字符串
-                    emptyDict={'questionId': questionList[i]['id'],'answer': answer,'active': True,'questionType': questionList[i]['type']}
-                    commitDetails.append(emptyDict)
-                json_data={
-                    'dataId':test['id'],
-                    'commitDetails':commitDetails
-                }
-                #刷题
-                submit = requests.post('https://youthstudy.12355.net/saomah5/api/question/submit/question', headers=headers, json=json_data)
-                print(json.loads(submit.text).get('msg'),end="")
-                submit_output=submit_output+json.loads(submit.text).get('msg')
-            print('\n')
+            if islimited(xLitemallToken) == False:
+                #获得题目
+                getList = requests.get('https://youthstudy.12355.net/saomah5/api/question/list', headers=headers)#获取题目列表
+                testList=json.loads(getList.text).get("data").get("list")
+                submit_output=''
+                for test in testList:
+                    params = {
+                        'dataId': test['id'],
+                        'time': t(),
+                    }
+                    #获取小题答案等信息
+                    testDetail = requests.get('https://youthstudy.12355.net/saomah5/api/question/detail', params=params,headers=headers)
+                    questionList=json.loads(testDetail.text).get("data").get("list")
+                    commitDetails=[]
+                    for i in range(len(questionList)):
+                        answerNum=[ord(s)-64 for s in list(questionList[i]['trueAnswer'])]#将列表内的字母换为数字
+                        answerStr = [str(x) for x in answerNum]#将列表内的数字换为字符串
+                        answer=','.join(answerStr)#将列表换为字符串
+                        emptyDict={'questionId': questionList[i]['id'],'answer': answer,'active': True,'questionType': questionList[i]['type']}
+                        commitDetails.append(emptyDict)
+                    json_data={
+                        'dataId':test['id'],
+                        'commitDetails':commitDetails
+                    }
+                    #刷题
+                    submit = requests.post('https://youthstudy.12355.net/saomah5/api/question/submit/question', headers=headers, json=json_data)
+                    print(json.loads(submit.text).get('msg'),end="")
+                    submit_output=submit_output+json.loads(submit.text).get('msg')
+                print('\n')
+            else:
+                print('达到每日积分限制，跳过执行')
+                submit_output='达到每日积分限制，跳过执行'
 
             #学习频道
             channellist=['1457968754882572290','1442413897095962625','1442413983955804162']#分别为 广东共青团原创专区、我们爱学习、团务小百科
             print("\n学习频道:")
+            channel_output=''
             for channelId in channellist:
                 if channelId == '1457968754882572290':
                     print('广东共青团原创专区：')
+                    channelNow='广东共青团原创专区：'
                 elif channelId == '1442413897095962625':
                     print('我们爱学习：')
+                    channelNow='我们爱学习：'
                 else:
                     print('团务小百科：')
-                params = {
-                    'channelId': channelId,
-                    'pageSize': '300',#提高pageSize以获得全部元素
-                    'time': t(),
-                }
-                getarticle = requests.get('https://youthstudy.12355.net/saomah5/api/article/get/channel/article', params=params, headers=headers)
-                articleslist = json.loads(getarticle.text).get("data").get("entity").get("articlesList")
-                addScore_output=''
-                availableArticles=0
-                for articles in articleslist:
-                    if articles['scoreStatus'] == False:
-                        params = {
-                            'id': articles['id'],
-                        }
-                        addScore = requests.get('https://youthstudy.12355.net/saomah5/api/article/addScore', params=params, headers=headers)
-                        print(json.loads(addScore.text).get('msg'),end="")
-                        addScore_output=addScore_output+json.loads(addScore.text).get('msg')
-                        availableArticles+=1
-                if availableArticles==0:
-                    print("无可供学习内容\n")
-                    addScore_output=addScore_output+"无可供学习内容"
+                    channelNow='团务小百科：'
+                if islimited(xLitemallToken) == False:
+                    params = {
+                        'channelId': channelId,
+                        'pageSize': '300',#提高pageSize以获得全部元素
+                        'time': t(),
+                    }
+                    getarticle = requests.get('https://youthstudy.12355.net/saomah5/api/article/get/channel/article', params=params, headers=headers)
+                    articleslist = json.loads(getarticle.text).get("data").get("entity").get("articlesList")
+                    addScore_output=''
+                    availableArticles=0
+                    for articles in articleslist:
+                        if articles['scoreStatus'] == False:
+                            params = {
+                                'id': articles['id'],
+                            }
+                            addScore = requests.get('https://youthstudy.12355.net/saomah5/api/article/addScore', params=params, headers=headers)
+                            print(json.loads(addScore.text).get('msg'),end="")
+                            addScore_output=addScore_output+json.loads(addScore.text).get('msg')
+                            availableArticles+=1
+                    if availableArticles==0:
+                        print("无可供学习内容\n")
+                        addScore_output=addScore_output+"无可供学习内容"
+                    else:
+                        print('\n')
                 else:
-                    print('\n')
+                    print('达到每日积分限制，跳过执行')
+                    addScore_output='达到每日积分限制，跳过执行'
+                channel_output+=channelNow+addScore_output+'\n'
 
             output={}
             output['member']=member
             output['name']=profile.name()
             output['status']=name+'签到'+json.loads(saveHistory.text).get('msg')
-            output['result']="更新日期:"+updateDate+"\n名称:"+name+"\n打卡状态:"+json.loads(saveHistory.text).get('msg')+"\n刷题：\n"+submit_output+"\n学习频道：\n"+addScore_output
+            output['result']="更新日期:"+updateDate+"\n名称:"+name+"\n打卡状态:"+json.loads(saveHistory.text).get('msg')+"\n刷题：\n"+submit_output+"\n学习频道：\n"+channel_output
             output['score']=score
             output_list.append(output)
         except:
