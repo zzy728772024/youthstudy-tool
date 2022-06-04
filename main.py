@@ -196,6 +196,7 @@ if __name__ == '__main__':#防止import的时候被执行
                     print('达到每日积分限制，跳过执行')
                     addScore_output='达到每日积分限制，跳过执行'
                 channel_output+=channelNow+addScore_output+'\n'
+            channel_output=channel_output.strip()
 
             output={}
             output['member']=member
