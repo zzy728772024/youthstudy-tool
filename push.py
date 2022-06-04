@@ -38,7 +38,7 @@ for member in origin:
 if ('token' in locals().keys()) == True:
     pass
 else:
-    exit('+===============+\n| Token未定义！ |\n+===============+')
+    exit('+===============+\n| Token未定义! |\n+===============+')
 
 if errorcount!=len(main.memberlist):
     titledone=False
@@ -47,7 +47,7 @@ if errorcount!=len(main.memberlist):
             if titledone==False:
                 pushdata['title']='['+str(len(main.memberlist)-errorcount)+'/'+str(len(main.memberlist))+']'+i['status']+'啦'
                 titledone=True
-        pushdata['content']+='mid或X-Litemall-Token：'+i['member']+'\n名称：'+i['name']+'\n'+i['result']+'\n\n'
+        pushdata['content']+='mid或X-Litemall-Token:'+i['member']+'\n名称:'+i['name']+'\n'+i['result']+'\n\n'
 else:
     pushdata['title']='任务执行失败'
     pushdata['content']='所有mid或X-Litemall-Token皆打卡失败'
