@@ -183,7 +183,7 @@ if __name__ == '__main__':#防止import的时候被执行
             output['member']=member
             output['name']=profile.name()
             output['status']=name+'签到'+json.loads(saveHistory.text).get('msg')
-            output['result']="更新日期:"+updateDate+"\n名称:"+name+"\n打卡状态:"+json.loads(saveHistory.text).get('msg')+"\n刷题：\n"+submit_output+"\n学习频道刷文章：\n"+addScore_output
+            output['result']="更新日期:"+updateDate+"\n名称:"+name+"\n打卡状态:"+json.loads(saveHistory.text).get('msg')+"\n刷题：\n"+submit_output+"\n学习频道：\n"+addScore_output
             output['score']=score
             output_list.append(output)
         except:
