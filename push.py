@@ -33,7 +33,7 @@ for member in origin:
         score_need=5000-score_now
     else:
         score_need=0
-    member['result']+='<br>此次执行增加了<b>'+str(score_add)+'</b>积分'+'<br>当前为<b>'+profile.medal()+'</b>，距离下一徽章还需<b>'+str(score_need)+'</b>积分'
+    member['result']+='<br>此次执行增加了<b>'+str(score_add)+'</b>积分'+'<br>当前为<b>'+profile.medal()+'</b>，距离下一徽章还需<b>'+str(score_need)+'</b>积分<br>'
 
 #检查token
 if ('token' in locals().keys()) == True:
