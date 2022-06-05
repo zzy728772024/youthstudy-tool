@@ -65,7 +65,10 @@ class GetProfile:
     def score(self):
         return(self.profile_dist['data']['entity']['score'])
     def medal(self):
-        return(self.profile_dist['data']['entity']['medal']['name'])
+        try:
+            return(self.profile_dist['data']['entity']['medal']['name'])
+        except:
+            return('无徽章信息')
     def name(self):
         return(self.profile_dist['data']['entity']['nickName'])
 #转换mid
@@ -125,13 +128,13 @@ if __name__ == '__main__':#防止import的时候被执行
             for channelId in channellist:
                 if channelId == '1457968754882572290':
                     print('广东共青团原创专区:')
-                    channelNow='广东共青团原创专区:'
+                    channelNow='<b>广东共青团原创专区:</b>'
                 elif channelId == '1442413897095962625':
                     print('我们爱学习:')
-                    channelNow='我们爱学习:'
+                    channelNow='<b>我们爱学习:</b>'
                 else:
                     print('团务小百科:')
-                    channelNow='团务小百科:'
+                    channelNow='<b>团务小百科:</b>'
                 if islimited(xLitemallToken) == False:
                     params = {
                         'channelId': channelId,
@@ -159,8 +162,8 @@ if __name__ == '__main__':#防止import的时候被执行
                 else:
                     print('达到每日积分限制，跳过执行')
                     addScore_output='达到每日积分限制，跳过执行'
-                channel_output+=channelNow+addScore_output+'\n'
-            channel_output=channel_output.strip()
+                channel_output+=channelNow+addScore_output+'<br>'
+            channel_output=channel_output.rstrip('<br>')
             #我要答题”
             print('我要答题:')
             if islimited(xLitemallToken) == False:
@@ -200,7 +203,7 @@ if __name__ == '__main__':#防止import的时候被执行
             output['member']=member
             output['name']=profile.name()
             output['status']=name+'签到'+json.loads(saveHistory.text).get('msg')
-            output['result']='更新日期:'+updateDate+'\n名称:'+name+'\n打卡状态:'+json.loads(saveHistory.text).get('msg')+'\n学习频道:\n'+channel_output+'\n我要答题:\n'+submit_output
+            output['result']='<b>更新日期:</b>'+updateDate+'<br><b>名称:</b>'+name+'<br><b>打卡状态:</b>'+json.loads(saveHistory.text).get('msg')+'<br><b>=====学习频道=====</b><br>'+channel_output+'<br><b>我要答题:</b>'+submit_output
             output['score']=score
             output_list.append(output)
         except:
