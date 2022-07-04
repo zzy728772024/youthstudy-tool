@@ -49,10 +49,13 @@ else:
 if errorcount!=len(main.memberlist):
     titledone=False
     for i in origin:
-        if i['status']!='error':
+        if i['status']!=('error'or'passed'):
             if titledone==False:
                 pushdata['title']='['+str(len(main.memberlist)-errorcount)+'/'+str(len(main.memberlist))+']'+i['status']+'啦'
-                titledone=True
+                titledone=True#若有打卡成功的则锁定标题
+        else:
+            if titledone==False:
+                pushdata['title']='['+str(len(main.memberlist)-errorcount)+'/'+str(len(main.memberlist))+']'+'积分任务执行完毕'
         pushdata['content']+='<b>mid或X-Litemall-Token:</b>'+i['member']+'<br><b>名称:</b>'+i['name']+'<br>'+i['result']+'<br>'
 else:
     pushdata['title']='任务执行失败'
