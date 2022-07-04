@@ -49,7 +49,7 @@ else:
 if errorcount!=len(main.memberlist):
     titledone=False
     for i in origin:
-        if i['status']!=('error'or'passed'):
+        if i['status']!=('error'and'passed'):
             if titledone==False:
                 pushdata['title']='['+str(len(main.memberlist)-errorcount)+'/'+str(len(main.memberlist))+']'+i['status']+'啦'
                 titledone=True#若有打卡成功的则锁定标题
