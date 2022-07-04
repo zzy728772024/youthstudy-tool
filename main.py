@@ -1,8 +1,8 @@
-import requests,json,time,re
+import requests,json,time,re,os
 import urllib.parse
 
-#如不使用github actions，请删除下方注释并手动设定member（mid或者X-Litemall-Token，多个请以|隔开）
-#member=''
+#如不使用github actions，请手动设定member（mid或者X-Litemall-Token，多个请以|隔开）
+member=''
 apiHeaders = {
   'Host': 'tuanapi.12355.net',
   'Connection': 'keep-alive',
@@ -48,8 +48,13 @@ headers = {
     'Referer': 'https://youthstudy.12355.net/h5/',
     'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
 }
+if member == '' :
+    try:
+        member=os.environ['MEMBER']
+    except:
+        pass
 #检查member
-if 'member' in locals().keys():
+if member != '':
     pass
 else:
     exit('+================+\n| member未定义！ |\n+================+')

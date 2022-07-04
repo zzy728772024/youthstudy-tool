@@ -1,4 +1,4 @@
-import requests,json,main,time
+import requests,json,main,time,os
 with open('result.json','r',encoding='utf8') as origin_file:
     origin=origin_file.read()
 origin=json.loads(origin)
@@ -9,8 +9,13 @@ pushdata['template']='html'
 
 pushdata['content']=''
 # 具体请查看pushplus api文档https://www.pushplus.plus/doc/guide/api.html
-# token=''
+token=''
 
+if token == '':
+    try:
+        token=os.environ['PUSHTOKEN']
+    except:
+        pass
 time.sleep(60)#平台统计有延迟
 errorcount=0
 for member in origin:
