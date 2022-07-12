@@ -1,4 +1,4 @@
-import requests,json,main,time,os
+import requests,json,main,time,os,re
 with open('result.json','r',encoding='utf8') as origin_file:
     origin=origin_file.read()
 origin=json.loads(origin)
@@ -7,7 +7,6 @@ pushdata={}
 pushdata['channel']='wechat'
 pushdata['template']='html'
 
-pushdata['content']=''
 # 具体请查看pushplus api文档https://www.pushplus.plus/doc/guide/api.html
 token=''
 
@@ -16,6 +15,11 @@ if token == '':
         token=os.environ['PUSHTOKEN']
     except:
         pass
+LatestStudy=json.loads(requests.get('https://youthstudy.12355.net/saomah5/api/young/chapter/new',headers=main.headers).text)
+StudyId=re.search('[a-z0-9]{10}',LatestStudy['data']['entity']['url']).group(0)
+StudyName=LatestStudy['data']['entity']['name']
+pushdata['content']='<a href="'+'https://finishpage.dgstu.tk/?id='+StudyId+'&name='+StudyName+'">（伪）当前期完成页</a><br>'
+
 time.sleep(60)#平台统计有延迟
 errorcount=0
 for member in origin:
