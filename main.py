@@ -228,6 +228,6 @@ if __name__ == '__main__':#防止import的时候被执行
             output['score']=score
             output_list.append(output)
         except:
-            output_list.append({'member':member,'status':'error','result':'打卡状态:失败'})
+            output_list.append({'member':member,'status':'error'})
     with open('result.json','w+',encoding='utf8') as new_file:
         new_file.write(json.dumps(output_list))

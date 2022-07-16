@@ -25,6 +25,7 @@ errorcount=0
 for member in origin:
     if member['status']== 'error':
         errorcount+=1
+        pushdata['content']+='<b>mid或X-Litemall-Token:</b>'+member['member']+'<br><b>状态:</b>'+'执行出错'+'<br>'
         continue
     XLtoken=main.ConverMidToXLToken(member['member'])
     profile=main.GetProfile(XLtoken)
@@ -43,6 +44,7 @@ for member in origin:
     else:
         score_need=0
     member['result']+='<br>此次执行增加了<b>'+str(score_add)+'</b>积分'+'<br>当前为<b>'+profile.medal()+'</b>，距离下一徽章还需<b>'+str(score_need)+'</b>积分<br>'
+    pushdata['content']+='<b>mid或X-Litemall-Token:</b>'+member['member']+'<br><b>名称:</b>'+member['name']+'<br>'+member['result']+'<br>'
 
 #检查token
 if ('token' in locals().keys()) == True:
@@ -60,7 +62,6 @@ if errorcount!=len(main.memberlist):
         else:
             if titledone==False:
                 pushdata['title']='['+str(len(main.memberlist)-errorcount)+'/'+str(len(main.memberlist))+']'+'积分任务执行完毕'
-        pushdata['content']+='<b>mid或X-Litemall-Token:</b>'+i['member']+'<br><b>名称:</b>'+i['name']+'<br>'+i['result']+'<br>'
 else:
     pushdata['title']='任务执行失败'
     pushdata['content']='所有mid或X-Litemall-Token皆打卡失败'
