@@ -29,7 +29,7 @@
         - `dfajkhdfkjalsdhfalkd.akdjfhalksjdhfalksdfh|adfkjahsdkfjlhsld.adsfasdfasdf`（共两人，仅使用X-Litemall-Token）
 3. 点击仓库的Actions，再点击“I understand my workflows, go ahead and enable them”的绿色按钮启用actions
 4. 在侧边栏找到“GitHub Actions Youthstudy Bot”并点击，再点击右侧的“Enable workflow”启用此action
-- 如本地使用请在main.py中手动指定xLitemallToken
+- 如本地使用请在main.py中手动指定xLitemallToken或mid
 - 默认每天中午12点(UTC+8)执行定时任务（由于github action的特性，可能会延迟20分钟左右），如需修改请手动更改`- cron: '0 4 * * *'`字段，生成表达式可以用[https://crontab.guru/](https://crontab.guru/)
 
 ## ⚠安全性警告
