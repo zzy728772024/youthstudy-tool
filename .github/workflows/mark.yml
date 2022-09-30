@@ -33,7 +33,7 @@ jobs:
       - name: Run main command
         run: python main.py
 
-      - name: Submit previous activity
+      - name: Submit previous studies
         if: github.event.inputs.previous == 'yes'
         run: python previous.py
 
