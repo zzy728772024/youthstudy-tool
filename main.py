@@ -59,8 +59,8 @@ if member != '':
 else:
     exit('+================+\n| member未定义！ |\n+================+')
 
-#清除所有空格并以|分割字符串创建列表
-memberlist=(member.replace(' ','')).split('|')
+#清除所有空字符并以|分割字符串创建列表
+memberlist=("".join(member.split())).split('|')
 
 #获取积分、徽章
 class GetProfile:
