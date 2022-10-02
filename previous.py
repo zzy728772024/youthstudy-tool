@@ -10,7 +10,7 @@ except:
 #获取季
 for member in memberlist:
     try:
-        print("往期课程打卡:")
+        print("=====往期课程打卡=====")
         headers['X-Litemall-Token']=ConverMidToXLToken(member)
         getChapterList = requests.get('https://youthstudy.12355.net/saomah5/api/young/course/list', headers=headers)
         chapterList=json.loads(getChapterList.text).get("data").get("list")

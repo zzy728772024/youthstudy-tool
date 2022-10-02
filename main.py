@@ -99,7 +99,11 @@ def islimited(XLToken):
 
 output_list=[]
 if __name__ == '__main__':#防止import的时候被执行
+    count=0
+    statusOutput=''#存储执行状态的字符串
     for member in memberlist:
+        count+=1
+        print('\t\t\t\t===============当前用户序号:',count,'===============\t\t\t\t')
         try:
             #将mid转换为xLitemallToken
             xLitemallToken=ConverMidToXLToken(member)
@@ -107,7 +111,7 @@ if __name__ == '__main__':#防止import的时候被执行
 
             score=profile.score()#获取打卡前积分，用于后续计算
             # 每日签到
-            print('每日签到:')
+            print('=====每日签到=====')
             mark = requests.get('https://youthstudy.12355.net/saomah5/api/young/mark/add', headers=headers)
             msg=json.loads(mark.text).get('msg')
             print(msg)
@@ -124,7 +128,7 @@ if __name__ == '__main__':#防止import的时候被执行
                 'chapterId': chapterId,
             }
             # 打卡
-            print('\n打卡最新一期青年大学习:')
+            print('\n=====打卡最新一期青年大学习======')
             for records in profile.StudyRecords():
                 if records['dataName']==name:
                     IsStudied=True
@@ -136,22 +140,22 @@ if __name__ == '__main__':#防止import的时候被执行
             else:
                 saveHistory = requests.post('https://youthstudy.12355.net/saomah5/api/young/course/chapter/saveHistory', headers=headers, data=data)
                 StudyStatus=json.loads(saveHistory.text).get('msg')
-            print('更新日期:',updateDate,'名称:',name,'打卡状态:',StudyStatus)
+            print('更新日期:',updateDate,'\n名称:',name,'\n打卡状态:',StudyStatus)
 
 
             #学习频道
             channellist=['1457968754882572290','1442413897095962625','1442413983955804162']#分别为 广东共青团原创专区、我们爱学习、团务小百科
-            print('\n学习频道:')
+            print('\n=====学习频道=====')
             channel_output=''
             for channelId in channellist:
                 if channelId == '1457968754882572290':
-                    print('广东共青团原创专区:')
+                    print('广东共青团原创专区:',end='')
                     channelNow='<b>广东共青团原创专区:</b>'
                 elif channelId == '1442413897095962625':
-                    print('我们爱学习:')
+                    print('我们爱学习:',end='')
                     channelNow='<b>我们爱学习:</b>'
                 else:
-                    print('团务小百科:')
+                    print('团务小百科:',end='')
                     channelNow='<b>团务小百科:</b>'
                 if islimited(xLitemallToken) == False:
                     params = {
@@ -173,17 +177,17 @@ if __name__ == '__main__':#防止import的时候被执行
                             addScore_output=addScore_output+json.loads(addScore.text).get('msg')
                             availableArticles+=1
                     if availableArticles==0:
-                        print('无可供学习内容\n')
+                        print('无可供学习内容')
                         addScore_output=addScore_output+'无可供学习内容'
                     else:
-                        print('\n')
+                        print('')
                 else:
                     print('达到每日积分限制，跳过执行')
                     addScore_output='达到每日积分限制，跳过执行'
                 channel_output+=channelNow+addScore_output+'<br>'
             channel_output=channel_output.rstrip('<br>')
             #我要答题”
-            print('我要答题:')
+            print('我要答题:',end='')
             if islimited(xLitemallToken) == False:
                 #获得题目
                 getList = requests.get('https://youthstudy.12355.net/saomah5/api/question/list', headers=headers)#获取题目列表
@@ -217,6 +221,7 @@ if __name__ == '__main__':#防止import的时候被执行
                 print('达到每日积分限制，跳过执行')
                 submit_output='达到每日积分限制，跳过执行'
 
+            statusOutput=statusOutput+str(count)+'\tOK\n'
             output={}
             output['member']=member
             output['name']=profile.name()
@@ -228,6 +233,13 @@ if __name__ == '__main__':#防止import的时候被执行
             output['score']=score
             output_list.append(output)
         except:
+            print('出现错误啦')
+            statusOutput=statusOutput+str(count)+'\terror\n'
             output_list.append({'member':member,'status':'error'})
+    print('\n执行结果如下:')
+    print('序号\t'+'青年大学习打卡状态')
+    print(statusOutput)
+    if 'error' in statusOutput:
+        print('出现错误啦！可能的原因有:\n1.您的网络\n2.您的mid或X-Litemall-Token有误\n3.其他问题(如知晓请反馈)')
     with open('result.json','w+',encoding='utf8') as new_file:
         new_file.write(json.dumps(output_list))
