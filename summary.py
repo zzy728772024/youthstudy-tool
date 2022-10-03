@@ -1,11 +1,11 @@
-from itertools import count
 import requests,json,main,time,os,re
 with open('result.json','r',encoding='utf8') as origin_file:
     origin=origin_file.read()
 origin=json.loads(origin)
 pushdata={}
+config=main.config
 #推送渠道
-pushdata['channel']='wechat'
+pushdata['channel']=config['push']['channel']
 pushdata['template']='html'
 
 # 具体请查看pushplus api文档https://www.pushplus.plus/doc/guide/api.html
@@ -70,7 +70,7 @@ else:
 
 #向pushplus发出推送请求
 try:
-    if os.environ['push']=='true':
+    if config['push']['push']=='yes':
         pushdata['token']=token
         push=json.loads(requests.post('http://www.pushplus.plus/send/',data=pushdata).text)
         if push['code'] == 200:
