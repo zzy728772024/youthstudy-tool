@@ -21,7 +21,7 @@
 #### 注：以下所提到的“仓库”皆为你自己Fork的仓库
 1. Fork本仓库
 2. 在仓库的Settings-Secrets-Actions中分别添加以下两个Secrets并按实际情况填写
-    - PUSHTOKEN（pushplus的token，**如不需要推送请将`.github/workflows/mark.yml`中的`push: true`字段改为`push: false`**）
+    - PUSHTOKEN（pushplus的token，**如不需要推送请将`config.ini`中的`push = yes`字段改为`push = no`**）
     - mid 【兼容X-Litemall-Token（可混用），多个请以|隔开】（智慧团建-认证资料-生成电子团员证，点击最下方生成按钮。在团员证页面复制链接 应为：`https://tuan.12355.net/wechat/view/information/member_certification_generated.html?memberId=`**xxxxxx**`&showMemberAdditionNames=&showMemberRewardIds=&isShowAllFee=true` 其中xxxxxx即为mid，X-Litemall-Token需抓包获取，不推荐使用）
       - 举个栗子
         - `8888888|dfajkhdfkjalsdhfalkd.akdjfhalksjdhfalksdfh|1234567`（共三人，二者混用）
